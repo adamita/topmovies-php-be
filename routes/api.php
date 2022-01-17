@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\TopMoviesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +17,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::prefix('topmovies')->name('api.v1.')->group(function () {
+    Route::get('get', [TopMoviesController::class,'index'])->name('api.topmovies.get');
+
+    Route::get('test', function () {
+        return response()->json(['test'=>'OK']);
+    })->name('api.topmovies.test');
 });
