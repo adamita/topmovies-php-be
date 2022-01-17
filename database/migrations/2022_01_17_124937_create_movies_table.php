@@ -24,7 +24,7 @@ class CreateMoviesTable extends Migration
             $table->string('movie-url')->nullable();
             $table->integer('length')->nullable();
             $table->string('post-url')->nullable();
-            $table->decimal('vote-average',2,1)->default(1);
+            $table->decimal('vote-average',3,1)->default(1);
             $table->date('release-date')->nullable();
 
             $table->foreignId('director_id')->nullable()->constrained('people')->onDelete('cascade');

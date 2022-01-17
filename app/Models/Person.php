@@ -10,7 +10,7 @@ class Person extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public function movie(){
-        return $this->belongsToMany(Movie::class);
+    public function movies(){
+        return $this->hasMany(Movie::class,'director_id','id');
     }
 }

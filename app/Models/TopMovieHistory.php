@@ -11,6 +11,6 @@ class TopMovieHistory extends Model
     use HasFactory, SoftDeletes;
 
     public function topMovie(){
-        return $this->hasOne(TopMovie::class);
+        return $this->hasOne(TopMovie::class,'history_id');
     }
 }
