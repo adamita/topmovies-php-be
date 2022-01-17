@@ -18,8 +18,8 @@ class TopMoviesController extends Controller
     {
         $client=new Client();
         $api=new TMDBApi($client);
-        dd($api->getTopRatedMoviesList());
-        return response()->$api->getTopRatedMoviesList();
+        $list=$api->getTopRatedMoviesList(30);
+        return response()->json($list);
     }
 
     /**

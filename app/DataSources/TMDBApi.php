@@ -19,7 +19,25 @@ class TMDBApi
         $this->lang = 'en-EN';
     }
 
-    public function getTopRatedMoviesList($page=1){
+    public function getTopRatedMoviesList($count = 20){
+        $resp= $this->getTopRatedMoviesListByPage();
+        $list=[];
+        $page=1;
+        $total=0;
+        do
+        {
+            $resp =  $this->getTopRatedMoviesListByPage($page);
+            if ($resp){
+                $list=array_merge($list, $resp['results']);
+                $total=(int)$resp['total_results'];
+            }
+            $page++;
+        }
+        while (count($list) < $count && count($list) < $total);
+        return array_slice($list,0,$count);
+    }
+
+    public function getTopRatedMoviesListByPage($page=1){
         $res = $this->client->get("{$this->url}/movie/top_rated", [
             'query'=>[
                 'api_key'=>$this->config['key'],
