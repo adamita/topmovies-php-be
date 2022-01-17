@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\DataSources\TMDBApi;
 use App\Http\Controllers\Controller;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 class TopMoviesController extends Controller
@@ -14,7 +16,10 @@ class TopMoviesController extends Controller
      */
     public function index()
     {
-        return response()->json(['test'=>'OK']);
+        $client=new Client();
+        $api=new TMDBApi($client);
+        dd($api->getTopRatedMoviesList());
+        return response()->$api->getTopRatedMoviesList();
     }
 
     /**

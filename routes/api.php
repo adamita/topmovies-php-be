@@ -19,7 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('topmovies')->name('api.v1.')->group(function () {
+Route::prefix('topmovies')->name('api.topmovies.')->group(function () {
     Route::get('get', [TopMoviesController::class,'index'])->name('api.topmovies.get');
 
     Route::get('test', function () {
