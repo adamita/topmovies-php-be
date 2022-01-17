@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTopMovieHistoryTable extends Migration
+class CreateTopMoviesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,14 @@ class CreateTopMovieHistoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('top_movie_history', function (Blueprint $table) {
+        Schema::create('top_movies', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreignId('history_id')->constrained('top_movie_histories')->onDelete('cascade');
+            $table->foreignId('movie_id')->constrained('movies');
+            $table->integer('rank')->default(1);
         });
     }
 
@@ -27,6 +31,6 @@ class CreateTopMovieHistoryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('top_movie_history');
+        Schema::dropIfExists('top_movies');
     }
 }

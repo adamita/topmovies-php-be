@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePersonTable extends Migration
+class CreateTopMovieHistoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,10 @@ class CreatePersonTable extends Migration
      */
     public function up()
     {
-        Schema::create('person', function (Blueprint $table) {
+        Schema::create('top_movie_histories', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-
-            $table->string('name');
-            $table->text('bio');
-            $table->date('birthday');
         });
     }
 
@@ -31,6 +27,6 @@ class CreatePersonTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('person');
+        Schema::dropIfExists('top_movie_histories');
     }
 }
