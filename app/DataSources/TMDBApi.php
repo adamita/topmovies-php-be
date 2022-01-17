@@ -38,12 +38,35 @@ class TMDBApi
     }
 
     public function getTopRatedMoviesListByPage($page=1){
-        $res = $this->client->get("{$this->url}/movie/top_rated", [
-            'query'=>[
-                'api_key'=>$this->config['key'],
-                'lang'=>$this->lang,
-                'page'=>$page
-            ]
+        return $this->get('/movie/top_rated',[
+            'lang'=>$this->lang,
+            'page'=>$page
+        ]);
+    }
+
+    public function getMovieDetails($id){
+        return $this->get("/movie/{$id}");
+    }
+
+    public function getMovieCredits($id){
+        return $this->get("/movie/{$id}/credits");
+    }
+
+    public function getPerson($id){
+        return $this->get("/person/{$id}");
+    }
+
+    private function get($action, $query=null){
+        $queryString=[
+            'api_key'=>$this->config['key']
+        ];
+
+        if(isset($query)){
+            $queryString=array_merge($queryString,$query);
+        }
+
+        $res = $this->client->get("{$this->url}{$action}", [
+            'query'=>$queryString
         ]);
 
         if ($res->getStatusCode() !== Response::HTTP_OK) {
@@ -51,17 +74,5 @@ class TMDBApi
         }
 
         return json_decode($res->getBody()->getContents(), true);
-    }
-
-    public function getMovieDetails(){
-
-    }
-
-    public function getMovieCredits(){
-
-    }
-
-    public function getPerson(){
-
     }
 }
