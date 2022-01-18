@@ -39,48 +39,45 @@ class TMDBUpdate extends Command
     public function __construct()
     {
         parent::__construct();
+        $this->client=new Client();
+        $this->api=new TMDBApi($this->client);
     }
 
-    protected function updateTopMovies(){
-        $count=10;
-        $client=new Client();
-        $api=new TMDBApi($client);
+    protected function getMovies($count){
+        $topMoviesList=$this->api->getTopRatedMoviesDetailedList($count);
 
-        $topMoviesList=$api->getTopRatedMoviesList($count);
-        $movies=array_map(function ($movie) use ($api){
-            $id=(int)$movie['id'];
-            $movie=$api->getMovie($id);
-            $movie['director_id']=$api->getDirector($id)['id'];
-            $url=StringHelper::clean($movie['title']);
-            $movie['movie_url']="www.themoviedb.org/movie/{$movie['id']}-{$url}";
+        return array_map(function ($movie){
+            $movie['director_id']=$this->api->getDirector($movie['id'])['id'];
+
             $mov=Movie::firstOrNew(['id'=>$movie['id']]);
             $mov->fill($movie);
-
-            foreach($movie['genres'] as $genre){
-                $gen=Genre::firstOrNew(['id'=>$genre['id']]);
-                $gen->fill($genre);
-                $gen->save();
-            }
-            $mov->genres()->sync(array_column($movie['genres'],'id'));
+            $mov->addGenres($movie['genres']);
 
             return $mov;
         }, $topMoviesList);
+    }
 
+    protected function getDirectors($movies){
         $directorIds=array_unique(array_column($movies, 'director_id'));
-        $directors=array_map(function ($id) use ($api){
-            $data=$api->getPerson($id);
+
+        return array_map(function ($id){
+            $data=$this->api->getPerson($id);
             $person=Person::firstOrNew(['id'=>$data['id']]);
             $person->fill($data);
             return $person;
         }, $directorIds);
+    }
 
+    protected function saveTopMovies($movies, $directors){
         $history=TopMovieHistory::create();
+
         foreach($directors as $dir){
             $dir->save();
         }
 
         foreach($movies as $key => $movie){
             $movie->save();
+            $movie->syncGenres();
             $topMovie=new TopMovie([
                 'movie_id'=>$movie->id,
                 'history_id'=>$history->id,
@@ -88,6 +85,13 @@ class TMDBUpdate extends Command
             ]);
             $topMovie->save();
         }
+    }
+
+    protected function updateTopMovies($count=10){
+        $movies=$this->getMovies($count);
+        $directors=$this->getDirectors($movies);
+
+        $this->saveTopMovies($movies, $directors);
     }
 
     /**

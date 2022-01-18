@@ -2,6 +2,7 @@
 
 namespace App\DataSources;
 
+use App\Helpers\StringHelper;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 //use GuzzleHttp\Psr7\Request;
@@ -9,6 +10,7 @@ use Illuminate\Http\Response;
 
 class TMDBApi
 {
+    const WEB_URL='www.themoviedb.org';
     const API_URL='https://api.themoviedb.org/3';
 
     public function __construct(Client $client)
@@ -17,6 +19,20 @@ class TMDBApi
         $this->config = config('services.tmdb');
         $this->url = empty($this->config['url']) ? static::API_URL : $this->config['url'];
         $this->lang = 'en-EN';
+    }
+
+    public function getTopRatedMoviesDetailedList($count=20){
+        $topMoviesList=$this->getTopRatedMoviesList($count);
+
+        return array_map(function ($movie){
+            $id=(int)$movie['id'];
+
+            $movie=$this->getMovie($id);
+            $movie['director_id']=$this->getDirector($id)['id'];
+            $movie['movie_url']=$this->webUrl($movie);
+
+            return $movie;
+        }, $topMoviesList);
     }
 
     public function getTopRatedMoviesList($count = 20){
@@ -81,5 +97,13 @@ class TMDBApi
         }
 
         return json_decode($res->getBody()->getContents(), true);
+    }
+
+    private function webUrl(array $attr){
+        if(!array_key_exists('title',$attr) || !array_key_exists('id',$attr))
+            return '';
+
+        $url=StringHelper::clean($attr['title']);
+        return static::WEB_URL . "/movie/{$attr['id']}-{$url}";
     }
 }

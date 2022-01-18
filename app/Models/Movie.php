@@ -22,27 +22,7 @@ class Movie extends Model
         'director_id'
     ];
 
-    private static function clean($string) {
-        $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
-
-        return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
-     }
-
-    public static function getMovie($movie){
-        $url=Movie::clean($movie['title']);
-        $data=[
-            'id'=>$movie['id'],
-            'title'=>$movie['title'],
-            'overview'=>$movie['overview'],
-            'movie_url'=>"www.themoviedb.org/movie/{$movie['id']}-{$url}",
-            'length'=>$movie['runtime'],
-            'post_url'=>$movie['poster_path'],
-            'vote_average'=>$movie['vote_average'],
-            'release_date'=>$movie['release_date'],
-            'director_id'=>$movie['director_id']
-        ];
-        return new Movie($data);
-    }
+    protected $tempGenres=[];
 
     public function director(){
         return $this->hasOne(Person::class,'id','director_id');
@@ -50,5 +30,19 @@ class Movie extends Model
 
     public function genres(){
         return $this->belongsToMany(Genre::class);
+    }
+
+    public function addGenres($genres){
+        foreach($genres as $genre){
+            $gen=Genre::firstOrNew(['id'=>$genre['id']]);
+            $gen->fill($genre);
+            $gen->save();
+        }
+
+        $this->tempGenres=array_column($genres,'id');
+    }
+
+    public function syncGenres(){
+        $this->genres()->sync($this->tempGenres);
     }
 }
