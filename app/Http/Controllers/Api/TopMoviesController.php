@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\DataSources\TMDBApi;
 use App\Http\Controllers\Controller;
 use App\Helpers\StringHelper;
+use App\Models\Genre;
 use App\Models\Movie;
 use App\Models\Person;
 use App\Models\TopMovie;
@@ -29,6 +30,14 @@ class TopMoviesController extends Controller
             $movie['movie_url']="www.themoviedb.org/movie/{$movie['id']}-{$url}";
             $mov=Movie::firstOrNew(['id'=>$movie['id']]);
             $mov->fill($movie);
+
+            foreach($movie['genres'] as $genre){
+                $gen=Genre::firstOrNew(['id'=>$genre['id']]);
+                $gen->fill($genre);
+                $gen->save();
+            }
+            $mov->genres()->sync(array_column($movie['genres'],'id'));
+
             return $mov;
         }, $topMoviesList);
 

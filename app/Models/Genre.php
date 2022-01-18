@@ -10,6 +10,11 @@ class Genre extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable=[
+        'id',
+        'name'
+    ];
+
     public function movies(){
         return $this->belongsToMany(Movie::class);
     }
