@@ -5,7 +5,6 @@ namespace App\DataSources;
 use App\Helpers\StringHelper;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
-//use GuzzleHttp\Psr7\Request;
 use Illuminate\Http\Response;
 
 class TMDBApi

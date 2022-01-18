@@ -15,15 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 Route::prefix('topmovies')->name('api.topmovies.')->group(function () {
-    Route::get('index', [TopMoviesController::class,'index'])->name('api.topmovies.index');
+    Route::get('', [TopMoviesController::class,'index'])->name('api.topmovies.index');
+    Route::get('test', [TopMoviesController::class,'test'])->name('api.topmovies.test');
+    Route::get('update', [TopMoviesController::class,'update'])->name('api.topmovies.update');
     Route::get('get', [TopMoviesController::class,'get'])->name('api.topmovies.get');
-
-    Route::get('test', function () {
-        return response()->json(['test'=>'OK']);
-    })->name('api.topmovies.test');
 });

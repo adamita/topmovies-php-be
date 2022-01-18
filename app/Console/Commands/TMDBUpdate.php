@@ -4,8 +4,6 @@ namespace App\Console\Commands;
 
 use App\DataSources\TMDBApi;
 use GuzzleHttp\Client;
-use App\Helpers\StringHelper;
-use App\Models\Genre;
 use App\Models\Movie;
 use App\Models\Person;
 use App\Models\TopMovie;
