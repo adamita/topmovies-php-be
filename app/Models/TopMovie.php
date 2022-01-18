@@ -10,6 +10,12 @@ class TopMovie extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable=[
+        'movie_id',
+        'history_id',
+        'rank'
+    ];
+
     public function movie(){
         return $this->hasOne(Movie::class,'id','movie_id');
     }

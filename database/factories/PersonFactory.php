@@ -17,7 +17,7 @@ class PersonFactory extends Factory
         return [
             'name'=>$this->faker->name,
             'birthday'=>$this->faker->dateTimeBetween('-90 years'),
-            'bio'=>$this->faker->text()
+            'biography'=>$this->faker->text()
         ];
     }
 }

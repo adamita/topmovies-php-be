@@ -6,6 +6,9 @@ use App\DataSources\TMDBApi;
 use App\Http\Controllers\Controller;
 use App\Helpers\StringHelper;
 use App\Models\Movie;
+use App\Models\Person;
+use App\Models\TopMovie;
+use App\Models\TopMovieHistory;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
@@ -16,6 +19,7 @@ class TopMoviesController extends Controller
         $count=10;
         $client=new Client();
         $api=new TMDBApi($client);
+
         $topMoviesList=$api->getTopRatedMoviesList($count);
         $movies=array_map(function ($movie) use ($api){
             $id=(int)$movie['id'];
@@ -23,10 +27,33 @@ class TopMoviesController extends Controller
             $movie['director_id']=$api->getDirector($id)['id'];
             $url=StringHelper::clean($movie['title']);
             $movie['movie_url']="www.themoviedb.org/movie/{$movie['id']}-{$url}";
-            return new Movie($movie);
+            $mov=Movie::firstOrNew(['id'=>$movie['id']]);
+            $mov->fill($movie);
+            return $mov;
         }, $topMoviesList);
 
         $directorIds=array_unique(array_column($movies, 'director_id'));
+        $directors=array_map(function ($id) use ($api){
+            $data=$api->getPerson($id);
+            $person=Person::firstOrNew(['id'=>$data['id']]);
+            $person->fill($data);
+            return $person;
+        }, $directorIds);
+
+        $history=TopMovieHistory::create();
+        foreach($directors as $dir){
+            $dir->save();
+        }
+
+        foreach($movies as $key => $movie){
+            $movie->save();
+            $topMovie=new TopMovie([
+                'movie_id'=>$movie->id,
+                'history_id'=>$history->id,
+                'rank'=>$key+1
+            ]);
+            $topMovie->save();
+        }
 
         return $movies;
     }

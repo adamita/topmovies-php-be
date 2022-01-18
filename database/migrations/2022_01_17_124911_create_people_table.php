@@ -20,7 +20,7 @@ class CreatePeopleTable extends Migration
             $table->softDeletes();
 
             $table->string('name');
-            $table->text('bio')->nullable();
+            $table->text('biography')->nullable();
             $table->date('birthday')->nullable();
         });
     }

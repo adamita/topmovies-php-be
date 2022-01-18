@@ -14,11 +14,11 @@ class Movie extends Model
         'id',
         'title',
         'overview',
-        'movie-url',
-        'length',
-        'post-url',
-        'vote-average',
-        'release-date',
+        'movie_url',
+        'runtime',
+        'poster_path',
+        'vote_average',
+        'release_date',
         'director_id'
     ];
 
