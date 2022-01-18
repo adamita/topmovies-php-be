@@ -31,24 +31,12 @@ class TopMoviesController extends Controller
         return response()->json(['test'=>'OK']);
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         return redirect()->action([self::class,'test']);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function update()
     {
         Artisan::call('tmdb:sync');
         return response()->json(['updated']);

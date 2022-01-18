@@ -17,7 +17,7 @@ class TMDBUpdate extends Command
      *
      * @var string
      */
-    protected $signature = 'tmdb:sync';
+    protected $signature = 'tmdb:sync {count=20}';
 
     /**
      * The console command description.
@@ -85,7 +85,7 @@ class TMDBUpdate extends Command
         }
     }
 
-    protected function updateTopMovies($count=10){
+    protected function updateTopMovies($count=20){
         $movies=$this->getMovies($count);
         $directors=$this->getDirectors($movies);
 
@@ -99,7 +99,8 @@ class TMDBUpdate extends Command
      */
     public function handle()
     {
-        $this->updateTopMovies();
-        return 0;
+        $count=$this->argument('count');
+        $this->updateTopMovies($count);
+        return true;
     }
 }
