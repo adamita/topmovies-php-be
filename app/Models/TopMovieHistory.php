@@ -10,7 +10,7 @@ class TopMovieHistory extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public function topMovie(){
-        return $this->hasOne(TopMovie::class,'history_id');
+    public function movies(){
+        return $this->hasMany(TopMovie::class,'history_id');
     }
 }
