@@ -21,11 +21,11 @@ class CreateMoviesTable extends Migration
 
             $table->string('title');
             $table->longText('overview')->nullable();
-            $table->string('movie-url')->nullable();
-            $table->integer('length')->nullable();
-            $table->string('post-url')->nullable();
-            $table->decimal('vote-average',3,1)->default(1);
-            $table->date('release-date')->nullable();
+            $table->string('movie_url')->nullable();
+            $table->integer('runtime')->nullable();
+            $table->string('poster_path')->nullable();
+            $table->decimal('vote_average',3,1)->default(1);
+            $table->date('release_date')->nullable();
 
             $table->foreignId('director_id')->nullable()->constrained('people')->onDelete('cascade');
         });

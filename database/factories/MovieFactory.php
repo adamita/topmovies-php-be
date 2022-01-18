@@ -26,11 +26,11 @@ class MovieFactory extends Factory
         return [
             'title'=>$this->faker->text(50),
             'overview'=>$this->faker->text(300),
-            'movie-url'=>$this->faker->url(),
-            'length'=>$this->faker->randomNumber(3),
-            'post-url'=>$this->faker->url(),
-            'vote-average'=>$this->faker->randomFloat(1,0,10),
-            'release-date'=>$this->faker->dateTimeBetween('-100 years')
+            'movie_url'=>$this->faker->url(),
+            'runtime'=>$this->faker->randomNumber(3),
+            'poster_path'=>$this->faker->url(),
+            'vote_average'=>$this->faker->randomFloat(1,0,10),
+            'release_date'=>$this->faker->dateTimeBetween('-100 years')
         ];
     }
 }

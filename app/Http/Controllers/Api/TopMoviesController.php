@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\DataSources\TMDBApi;
 use App\Http\Controllers\Controller;
+use App\Helpers\StringHelper;
 use App\Models\Movie;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 class TopMoviesController extends Controller
 {
-
     public function get()
     {
         $count=10;
@@ -20,18 +20,13 @@ class TopMoviesController extends Controller
         $movies=array_map(function ($movie) use ($api){
             $id=(int)$movie['id'];
             $movie=$api->getMovie($id);
-            $movie['director']=$api->getDirector($id);
-            return $movie;
+            $movie['director_id']=$api->getDirector($id)['id'];
+            $url=StringHelper::clean($movie['title']);
+            $movie['movie_url']="www.themoviedb.org/movie/{$movie['id']}-{$url}";
+            return new Movie($movie);
         }, $topMoviesList);
 
-        // $directorIds=array_unique(array_map(function($movie){
-        //     return $movie['director']['id'];
-        // },$movies));
-
-        foreach($movies as $movie){
-            $mov=new Movie();
-            $mov->id=$movie->id;
-        }
+        $directorIds=array_unique(array_column($movies, 'director_id'));
 
         return $movies;
     }
