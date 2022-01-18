@@ -44,12 +44,19 @@ class TMDBApi
         ]);
     }
 
-    public function getMovieDetails($id){
+    public function getMovie($id){
         return $this->get("/movie/{$id}");
     }
 
     public function getMovieCredits($id){
         return $this->get("/movie/{$id}/credits");
+    }
+
+    public function getDirector($movieId)
+    {
+        $credit= $this->getMovieCredits($movieId);
+        $directorId=array_search('Director', array_column($credit['crew'], 'job'));
+        return $credit['crew'][$directorId];
     }
 
     public function getPerson($id){

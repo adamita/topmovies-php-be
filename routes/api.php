@@ -20,7 +20,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::prefix('topmovies')->name('api.topmovies.')->group(function () {
-    Route::get('get', [TopMoviesController::class,'index'])->name('api.topmovies.get');
+    Route::get('index', [TopMoviesController::class,'index'])->name('api.topmovies.index');
+    Route::get('get', [TopMoviesController::class,'get'])->name('api.topmovies.get');
 
     Route::get('test', function () {
         return response()->json(['test'=>'OK']);
