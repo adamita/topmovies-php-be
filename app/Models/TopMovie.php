@@ -13,7 +13,8 @@ class TopMovie extends Model
     protected $fillable=[
         'movie_id',
         'history_id',
-        'rank'
+        'rank',
+        'vote_average'
     ];
 
     public function movie(){

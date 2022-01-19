@@ -21,6 +21,7 @@ class CreateTopMoviesTable extends Migration
             $table->foreignId('history_id')->constrained('top_movie_histories')->onDelete('cascade');
             $table->foreignId('movie_id')->constrained('movies');
             $table->integer('rank')->default(1);
+            $table->decimal('vote_average',3,1)->default(1);
         });
     }
 

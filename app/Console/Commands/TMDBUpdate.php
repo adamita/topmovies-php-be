@@ -79,6 +79,7 @@ class TMDBUpdate extends Command
             $topMovie=new TopMovie([
                 'movie_id'=>$movie->id,
                 'history_id'=>$history->id,
+                'vote_average'=>$movie->vote_average,
                 'rank'=>$key+1
             ]);
             $topMovie->save();
