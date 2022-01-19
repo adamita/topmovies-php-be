@@ -17,7 +17,7 @@ class TMDBUpdate extends Command
      *
      * @var string
      */
-    protected $signature = 'tmdb:sync {count=20}';
+    protected $signature = 'tmdb:sync {count=210}';
 
     /**
      * The console command description.
