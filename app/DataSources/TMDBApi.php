@@ -23,8 +23,8 @@ class TMDBApi
     public function getTopRatedMoviesDetailedList($count=20){
         $topMoviesList=$this->getTopRatedMoviesList($count);
 
-        return array_map(function ($movie){
-            $id=(int)$movie['id'];
+        return array_map(function ($topMovie){
+            $id=(int)$topMovie['id'];
 
             $movie=$this->getMovie($id);
             $movie['director_id']=$this->getDirector($id)['id'];
