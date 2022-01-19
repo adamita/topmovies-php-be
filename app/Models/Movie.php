@@ -29,7 +29,7 @@ class Movie extends Model
     }
 
     public function genres(){
-        return $this->belongsToMany(Genre::class);
+        return $this->morphToMany(Genre::class,'genreable')->withTimestamps();
     }
 
     public function addGenres($genres){
