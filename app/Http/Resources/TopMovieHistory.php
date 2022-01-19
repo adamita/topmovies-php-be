@@ -3,9 +3,9 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\Movie as MovieResource;
+use App\Http\Resources\TopMovie as TopMovieResource;
 
-class TopMovie extends JsonResource
+class TopMovieHistory extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,8 +16,8 @@ class TopMovie extends JsonResource
     public function toArray($request)
     {
         return [
-            'rank'=>$this->rank,
-            $this->merge(new MovieResource($this->whenLoaded('movie')))
+            'last_updated'=>(string)$this->updated_at,
+            'movies'=>TopMovieResource::collection($this->whenLoaded('movies'))
         ];
     }
 }
