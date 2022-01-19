@@ -24,7 +24,7 @@ class Movie extends JsonResource
             'overview'=>$this->overview,
             'poster_url'=>$this->poster_path,
             'tmdb_id'=>$this->id,
-            'tmdb_vote average'=>$this->vote_average,
+            //'tmdb_vote average'=>$this->vote_average,
             //'tmbd_vote_count'=>$this->vote_count,
             'tmdb_url'=>$this->movie_url,
             'director'=>new PersonResource($this->whenLoaded('director'))

@@ -18,6 +18,7 @@ class Movie extends Model
         'runtime',
         'poster_path',
         'vote_average',
+        'vote_count',
         'release_date',
         'director_id'
     ];

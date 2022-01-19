@@ -80,6 +80,7 @@ class TMDBUpdate extends Command
                 'movie_id'=>$movie->id,
                 'history_id'=>$history->id,
                 'vote_average'=>$movie->vote_average,
+                'vote_count'=>$movie->vote_count,
                 'rank'=>$key+1
             ]);
             $topMovie->save();

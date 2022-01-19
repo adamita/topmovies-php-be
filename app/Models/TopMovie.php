@@ -14,7 +14,8 @@ class TopMovie extends Model
         'movie_id',
         'history_id',
         'rank',
-        'vote_average'
+        'vote_average',
+        'vote_count'
     ];
 
     public function movie(){

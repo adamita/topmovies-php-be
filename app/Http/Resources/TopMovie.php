@@ -17,6 +17,8 @@ class TopMovie extends JsonResource
     {
         return [
             'rank'=>$this->rank,
+            'vote_count'=>$this->vote_count,
+            'vote_average'=>$this->vote_average,
             $this->merge(new MovieResource($this->whenLoaded('movie')))
         ];
     }
