@@ -2,13 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
+//use App\Http\Resources\TopMovie as TopMovieResource;
+use App\Http\Resources\Movie as MovieResource;
 use App\Http\Controllers\Controller;
+use App\Models\Movie;
 use App\Models\TopMovieHistory;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 
 class TopMoviesController extends Controller
 {
+    public function get2(){
+        $result=MovieResource::collection(Movie::with('director','genres')->get());
+        return response()->json(MovieResource::collection($result));
+    }
+
     public function get()
     {
         if(TopMovieHistory::take(1)->pluck('id')->count()==0)
