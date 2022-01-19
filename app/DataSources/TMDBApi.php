@@ -35,6 +35,9 @@ class TMDBApi
     }
 
     public function getTopRatedMoviesList($count = 20){
+        if($count<=0)
+            return [];
+
         $resp= $this->getTopRatedMoviesListByPage();
         $list=[];
         $page=1;
