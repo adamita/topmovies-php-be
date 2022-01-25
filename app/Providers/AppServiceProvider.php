@@ -25,8 +25,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->singleton(TMDB::class, function($api){
-            return new TMDB(new Client(), env('TMDB_API_KEY'), env('TMDB_API_URL'));
+        $this->app->singleton(TMDB::class, function($app){
+            return new TMDB(
+                  new Client()
+                , env('TMDB_API_KEY')
+                , env('TMDB_API_URL'));
         });
+
+        $this->app->bind(
+            'App\Contracts\TMDBContract',
+            TMDB::class
+        );
     }
 }

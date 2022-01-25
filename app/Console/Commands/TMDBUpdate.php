@@ -6,7 +6,7 @@ use App\Models\Movie;
 use App\Models\Person;
 use App\Models\TopMovie;
 use App\Models\TopMovieHistory;
-use App\Services\TMDB;
+use App\Facades\TMDBFacade;
 use Illuminate\Console\Command;
 
 class TMDBUpdate extends Command
@@ -26,11 +26,10 @@ class TMDBUpdate extends Command
     protected $description = 'Update Top Movies list from TMDB';
 
     protected function getMovies($count){
-        $api=resolve(TMDB::class);
-        $topMoviesList=$api->getTopRatedMoviesDetailedList($count);
+        $topMoviesList=TMDBFacade::getTopRatedMoviesDetailedList($count);
 
-        return array_map(function ($movie) use ($api){
-            $movie['director_id']=$api->getDirector($movie['id'])['id'];
+        return array_map(function ($movie){
+            $movie['director_id']=TMDBFacade::getDirector($movie['id'])['id'];
 
             $mov=Movie::firstOrNew(['id'=>$movie['id']]);
             $mov->fill($movie);
@@ -43,9 +42,8 @@ class TMDBUpdate extends Command
     protected function getDirectors($movies){
         $directorIds=array_unique(array_column($movies, 'director_id'));
 
-        $api=resolve(TMDB::class);
-        return array_map(function ($id) use ($api){
-            $data=$api->getPerson($id);
+        return array_map(function ($id){
+            $data=TMDBFacade::getPerson($id);
             $person=Person::firstOrNew(['id'=>$data['id']]);
             $person->fill($data);
             return $person;

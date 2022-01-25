@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use App\Contracts\TMDBContract;
 use App\Helpers\StringHelper;
 use Illuminate\Http\Response;
 use GuzzleHttp\Client;
 
-class TMDB{
+class TMDB implements TMDBContract
+{
     const WEB_URL='www.themoviedb.org';
     const API_URL='https://api.themoviedb.org/3';
 
@@ -21,7 +23,7 @@ class TMDB{
         $this->lang = $lang;
     }
 
-    public function getTopRatedMoviesDetailedList($count=20){
+    public function getTopRatedMoviesDetailedList($count=20):array{
         $topMoviesList=$this->getTopRatedMoviesList($count);
 
         return array_map(function ($topMovie){
@@ -35,7 +37,7 @@ class TMDB{
         }, $topMoviesList);
     }
 
-    public function getTopRatedMoviesList($count = 20){
+    public function getTopRatedMoviesList($count = 20):array{
         if($count<=0)
             return [];
 
@@ -56,29 +58,29 @@ class TMDB{
         return array_slice($list,0,$count);
     }
 
-    public function getTopRatedMoviesListByPage($page=1){
+    public function getTopRatedMoviesListByPage($page=1):array{
         return $this->get('/movie/top_rated',[
             'lang'=>$this->lang,
             'page'=>$page
         ]);
     }
 
-    public function getMovie($id){
+    public function getMovie($id):array{
         return $this->get("/movie/{$id}");
     }
 
-    public function getMovieCredits($id){
+    public function getMovieCredits($id):array{
         return $this->get("/movie/{$id}/credits");
     }
 
-    public function getDirector($movieId)
+    public function getDirector($movieId):array
     {
         $credit= $this->getMovieCredits($movieId);
         $directorId=array_search('Director', array_column($credit['crew'], 'job'));
         return $credit['crew'][$directorId];
     }
 
-    public function getPerson($id){
+    public function getPerson($id):array{
         return $this->get("/person/{$id}");
     }
 
