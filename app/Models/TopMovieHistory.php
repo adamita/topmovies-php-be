@@ -11,7 +11,7 @@ class TopMovieHistory extends Model
     use HasFactory, SoftDeletes;
 
     public static function latestTopMoviesList(){
-        return parent::latest()
+        return self::latest()
             ->with('movies', function($topMovie){
                 $topMovie
                 ->with('movie', function($movie){
