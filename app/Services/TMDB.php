@@ -1,23 +1,24 @@
 <?php
 
-namespace App\DataSources;
+namespace App\Services;
 
 use App\Helpers\StringHelper;
-use Carbon\Carbon;
-use GuzzleHttp\Client;
 use Illuminate\Http\Response;
+use GuzzleHttp\Client;
 
-class TMDBApi
-{
+class TMDB{
     const WEB_URL='www.themoviedb.org';
     const API_URL='https://api.themoviedb.org/3';
 
-    public function __construct(Client $client)
+    private Client $client;
+    private string $key, $url, $lang;
+
+    public function __construct(Client $client, string $key, string $apiUrl='', string $lang='en-EN')
     {
         $this->client = $client;
-        $this->config = config('services.tmdb');
-        $this->url = empty($this->config['url']) ? static::API_URL : $this->config['url'];
-        $this->lang = 'en-EN';
+        $this->key = $key;
+        $this->url = empty($apiUrl) ? static::API_URL : $apiUrl;
+        $this->lang = $lang;
     }
 
     public function getTopRatedMoviesDetailedList($count=20){
@@ -83,7 +84,7 @@ class TMDBApi
 
     private function get($action, $query=null){
         $queryString=[
-            'api_key'=>$this->config['key']
+            'api_key'=>$this->key
         ];
 
         if(isset($query)){

@@ -2,12 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\DataSources\TMDBApi;
-use GuzzleHttp\Client;
 use App\Models\Movie;
 use App\Models\Person;
 use App\Models\TopMovie;
 use App\Models\TopMovieHistory;
+use App\Services\TMDB;
 use Illuminate\Console\Command;
 
 class TMDBUpdate extends Command
@@ -26,26 +25,12 @@ class TMDBUpdate extends Command
      */
     protected $description = 'Update Top Movies list from TMDB';
 
-    private $client;
-    private $api;
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->client=new Client();
-        $this->api=new TMDBApi($this->client);
-    }
-
     protected function getMovies($count){
-        $topMoviesList=$this->api->getTopRatedMoviesDetailedList($count);
+        $api=resolve(TMDB::class);
+        $topMoviesList=$api->getTopRatedMoviesDetailedList($count);
 
-        return array_map(function ($movie){
-            $movie['director_id']=$this->api->getDirector($movie['id'])['id'];
+        return array_map(function ($movie) use ($api){
+            $movie['director_id']=$api->getDirector($movie['id'])['id'];
 
             $mov=Movie::firstOrNew(['id'=>$movie['id']]);
             $mov->fill($movie);
@@ -58,8 +43,9 @@ class TMDBUpdate extends Command
     protected function getDirectors($movies){
         $directorIds=array_unique(array_column($movies, 'director_id'));
 
-        return array_map(function ($id){
-            $data=$this->api->getPerson($id);
+        $api=resolve(TMDB::class);
+        return array_map(function ($id) use ($api){
+            $data=$api->getPerson($id);
             $person=Person::firstOrNew(['id'=>$data['id']]);
             $person->fill($data);
             return $person;

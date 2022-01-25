@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\TMDB;
+use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +25,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->app->singleton(TMDB::class, function($api){
+            return new TMDB(new Client(), env('TMDB_API_KEY'), env('TMDB_API_URL'));
+        });
     }
 }
