@@ -10,8 +10,8 @@ class TopMovieHistory extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public static function latest(){
-        return self::orderBy(TopMovieHistory::CREATED_AT,'desc')
+    public static function latestTopMoviesList(){
+        return parent::latest()
             ->with('movies', function($topMovie){
                 $topMovie
                 ->with('movie', function($movie){
@@ -19,7 +19,6 @@ class TopMovieHistory extends Model
                 })
                 ->orderBy('rank');
             })
-            ->take(1)
             ->get();
     }
 

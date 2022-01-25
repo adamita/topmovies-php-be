@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Artisan;
 class TopMoviesController extends Controller
 {
     public function get(){
-        return response()->json(TopMovieHistoryResource::collection(TopMovieHistory::latest()));
+        return response()->json(TopMovieHistoryResource::collection(TopMovieHistory::latestTopMoviesList()));
     }
 
     public function test(){
